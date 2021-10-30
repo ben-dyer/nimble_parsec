@@ -667,11 +667,15 @@ defmodule NimbleParsecTest do
     defparsecp :lookahead_with_times,
                times(ascii_char([]) |> lookahead(ascii_char([?0..?9])), min: 1)
 
+    defparsecp :lookahead_with_inner_compound_combinator,
+              lookahead(utf8_char([?a]) |> utf8_char([?b]) |> utf8_char([?c]))
+
     test "aborts choice on no match" do
       assert lookahead_with_choice_digits_first("a0") == {:ok, [first: 'a'], "0", %{}, {1, 0}, 1}
       assert lookahead_with_choice_digits_first("aa") == {:ok, [second: 'a'], "a", %{}, {1, 0}, 1}
       assert lookahead_with_choice_digits_last("a0") == {:ok, [second: 'a'], "0", %{}, {1, 0}, 1}
       assert lookahead_with_choice_digits_last("aa") == {:ok, [first: 'a'], "a", %{}, {1, 0}, 1}
+      assert lookahead_with_inner_compound_combinator("abc") == {:ok, [], "abc", %{}, {1, 0}, 0}
     end
 
     test "with inner choice" do

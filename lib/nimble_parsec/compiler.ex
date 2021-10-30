@@ -260,7 +260,7 @@ defmodule NimbleParsec.Compiler do
   ## Lookahead
 
   defp extract_choices_from_lookahead([{:choice, choices, _}]), do: choices
-  defp extract_choices_from_lookahead(other), do: [other]
+  defp extract_choices_from_lookahead(other), do: [Enum.reverse(other)]
 
   defp compile_unbound_lookahead(combinators, kind, current, step, config) do
     {_, _, _, catch_all} = build_catch_all(kind, current, combinators, config)
